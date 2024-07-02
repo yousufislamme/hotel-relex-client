@@ -9,14 +9,14 @@ const ManageHotel = () => {
   const [currenthotel, setCurrenthotel] = useState(null);
 
   useEffect(() => {
-    fetch("https://hotel-relex-server.vercel.app/hotels")
+    fetch("http://localhost:5000/hotels")
       .then((res) => res.json())
       .then((data) => sethotels(data));
   }, []);
   console.log(hotels);
 
   const handleDelete = (_id) => {
-    fetch(`https://hotel-relex-server.vercel.app/hotels/${_id}`, {
+    fetch(`hhttp://localhost:5000/hotels/${_id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -34,7 +34,7 @@ const ManageHotel = () => {
   };
 
   const handleUpdate = (updatedHotel) => {
-    fetch(`https://hotel-relex-server.vercel.app/hotels/${updatedHotel._id}`, {
+    fetch(`http://localhost:5000/hotels/${updatedHotel._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const ManageHotel = () => {
       <div>
         {hotels.length === 0 ? (
           <Link className="text-lg text-blue-500" href={"/dashboard/addhotels"}>
-            Add the hotels...
+            loading
           </Link>
         ) : (
           <div className="overflow-x-auto">
@@ -69,13 +69,13 @@ const ManageHotel = () => {
                 <tr>
                   <th className="px-4 py-2">Item</th>
                   <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Category</th>
+                  <th className="px-4 py-2">Location</th>
                   <th className="px-4 py-2">Price</th>
                   <th className="px-4 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {hotels.map(({ _id, name, image, price }, index) => (
+                {hotels.map(({ _id, name, image, price, location }, index) => (
                   <tr key={_id} className="border-b">
                     <th className="px-4 py-2">{index + 1}</th>
                     <td className="px-4 py-2">
@@ -93,8 +93,8 @@ const ManageHotel = () => {
                     </td>
                     <td className="px-4 py-2">
                       <span className="badge badge-ghost badge-sm">
-                        {/* {category} */}
-                        others
+                        {location?.address}
+                        {/* others */}
                       </span>
                     </td>
                     <td className="px-4 py-2">${price}</td>
@@ -108,12 +108,12 @@ const ManageHotel = () => {
                             price,
                           })
                         }
-                        className="btn btn-outline btn-success"
+                        className="px-2 py-2 bg-green-600 text-white rounded-md"
                       >
                         Edit
                       </button>
                       <button
-                        className="btn btn-outline btn-error"
+                        className="px-2 py-2 bg-red-600 text-white rounded-md"
                         onClick={() => handleDelete(_id)}
                       >
                         Delete
@@ -179,22 +179,22 @@ const EdithotelModal = ({ hotel, onClose, onUpdate }) => {
           <div className="mb-4">
             <label className="block mb-2">Description</label>
             <textarea
-              name="des"
+              name="description"
               value={updatedHotel.description}
               onChange={handleChange}
               className="textarea textarea-bordered w-full"
             ></textarea>
           </div>
-          <div className="mb-4">
-            <label className="block mb-2">Category</label>
-            {/* <input
+          {/* <div className="mb-4">
+            <label className="block mb-2">address</label>
+            <input
               type="text"
-              name="category"
-              value={updatedHotel.category}
+              name="address"
+              value={updatedHotel.location}
               onChange={handleChange}
               className="input input-bordered w-full"
-            /> */}
-          </div>
+            />
+          </div> */}
           <div className="flex justify-end">
             <button
               type="button"
