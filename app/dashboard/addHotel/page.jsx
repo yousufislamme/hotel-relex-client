@@ -51,7 +51,7 @@ const AddRoom = () => {
     console.log(roomsDetails);
 
     // data post
-    fetch(hotelsData, {
+    fetch("https://hotel-relex-server.onrender.com/hotels", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -9,14 +9,14 @@ const ManageHotel = () => {
   const [currenthotel, setCurrenthotel] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/hotels")
+    fetch("https://hotel-relex-server.onrender.com/hotels")
       .then((res) => res.json())
       .then((data) => sethotels(data));
   }, []);
   console.log(hotels);
 
   const handleDelete = (_id) => {
-    fetch(`hhttp://localhost:5000/hotels/${_id}`, {
+    fetch(`https://hotel-relex-server.onrender.com/hotels/${_id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -34,13 +34,16 @@ const ManageHotel = () => {
   };
 
   const handleUpdate = (updatedHotel) => {
-    fetch(`http://localhost:5000/hotels/${updatedHotel._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedHotel),
-    })
+    fetch(
+      `https://hotel-relex-server.onrender.com/hotels/${updatedHotel._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedHotel),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {

@@ -38,7 +38,7 @@ const Testimonial = () => {
                 <img
                   src="https://source.unsplash.com/80x80/?portrait?1"
                   alt=""
-                  className="w-20 h-20 bg-center bg-cover rounded-md bg-gray-500 bg-gray-300"
+                  className="w-20 h-20 bg-center bg-cover rounded-md  bg-gray-300"
                 />
                 <div>
                   <p className="leading-tight">Leroy Jenkins</p>
@@ -89,7 +89,7 @@ const Testimonial = () => {
                 <img
                   src="https://source.unsplash.com/80x80/?portrait?1"
                   alt=""
-                  className="w-20 h-20 bg-center bg-cover rounded-md bg-gray-500 bg-gray-300"
+                  className="w-20 h-20 bg-center bg-cover rounded-md  bg-gray-300"
                 />
                 <div>
                   <p className="leading-tight">Leroy Jenkins</p>
