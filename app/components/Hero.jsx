@@ -1,5 +1,3 @@
-import React from "react";
-import Navbar from "../shared/Navbar";
 
 const Hero = () => {
   return (
@@ -19,7 +17,7 @@ const Hero = () => {
             <a
               rel="noopener noreferrer"
               href="#"
-              className="px-4 lg:px-8 py-3 text-md font-semibold rounded bg-violet-600"
+              className="px-4 lg:px-8 py-3 text-md text-white font-semibold rounded bg-violet-600"
             >
               Suspendisse
             </a>

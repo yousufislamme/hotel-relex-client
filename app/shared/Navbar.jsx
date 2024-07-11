@@ -1,10 +1,46 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
 
 const Navbar = () => {
+    const pathname = usePathname();
+    const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+   const dropdownRef = useRef(null);
+    const handleScroll = () => {
+        if (window.scrollY > lastScrollY) {
+          setIsVisible(false); // Scroll down
+        } else {
+          setIsVisible(true); // Scroll up
+        }
+        setLastScrollY(window.scrollY);
+  };
+  const handleDropdownToggle = () => {
+    setIsDropdownVisible((prev) => !prev);
+  };
+
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsDropdownVisible(false);
+    }
+  };
+    useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [lastScrollY]);
+  
   return (
-    <header className="p-4 bg-gray-100 text-gray-800 px-2 lg:px-16">
-      <div className="container flex justify-between h-16 mx-auto">
+    <header className={`first-letter: fixed top-0 z-50 w-full border-b-2 bg-white/50 backdrop-blur-2xl px-1 transition-transform duration-300 md:px-5 lg:px-20 ${
+          !isVisible ? "-translate-y-full" : "translate-y-0"
+        }`}>
+      <div className="container flex justify-between items-center h-16 mx-auto">
         <Link
           rel="noopener noreferrer"
           href={"/"}
@@ -23,12 +59,16 @@ const Navbar = () => {
           </svg>
           Relex
         </Link>
-        <ul className="items-stretch hidden space-x-3 md:flex">
-          <li className="flex">
+        <ul className=" space-x-3 md:flex">
+          <li className="">
             <Link
               rel="noopener noreferrer"
               href={"/"}
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border- dark:text-violet-600 dark:border-violet-600"
+              className={`flex items-center px-4 dark:border- dark:text-violet-600 dark:border-violet-600 ${
+                pathname === "/"
+                  ? "text-violet-600"
+                  : ""
+              }`}
             >
               Home
             </Link>
@@ -37,7 +77,11 @@ const Navbar = () => {
             <Link
               rel="noopener noreferrer"
               href={"/about"}
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
+              className={`flex items-center px-4 dark:border- dark:text-violet-600 dark:border-violet-600 ${
+                pathname === "/about"
+                  ? "text-violet-600"
+                  : ""
+              }`}
             >
               About
             </Link>
@@ -47,7 +91,11 @@ const Navbar = () => {
             <Link
               rel="noopener noreferrer"
               href={"/rooms"}
-              className="flex items-center px-4 -mb-1 border-b-2 "
+              className={`flex items-center px-4 dark:border- dark:text-violet-600 dark:border-violet-600 ${
+                pathname === "/rooms"
+                  ? "text-violet-600"
+                  : ""
+              }`}
             >
               Room
             </Link>
@@ -56,7 +104,11 @@ const Navbar = () => {
             <Link
               rel="noopener noreferrer"
               href={"/login"}
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
+              className={`flex items-center px-4 dark:border- dark:text-violet-600 dark:border-violet-600 ${
+                pathname === "/login"
+                  ? "text-violet-600"
+                  : ""
+              }`}
             >
               Login
             </Link>
@@ -65,7 +117,15 @@ const Navbar = () => {
             <Link
               rel="noopener noreferrer"
               href={"/dashboard"}
-              className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
+              className={`flex items-center px-4 dark:border- dark:text-violet-600 dark:border-violet-600 ${
+                pathname === "/dashboard"
+                  ? "text-violet-600"
+                  : ""
+              } ${
+                pathname === "/dashboard"
+                  ? "text-violet-600"
+                  : ""
+              }`}
             >
               Dashboard
             </Link>
