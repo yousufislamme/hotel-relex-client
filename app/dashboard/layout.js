@@ -4,7 +4,7 @@ export default function DashboardLayout({
   children, // will be a page or nested layout
 }) {
   return (
-    <section className="px-8 flex">
+    <section className="px-8 py-16 flex">
       {/* Include shared UI here e.g. a header or sidebar */}
       <div className="w-[20%] ">
         <Sidebar />

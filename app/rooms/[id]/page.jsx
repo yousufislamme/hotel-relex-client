@@ -2,10 +2,11 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-
+import { jsPDF } from "jspdf";
 const RoomDetails = ({ params }) => {
   const id = params.id;
   const [data, setData] = useState(null);
+  const [bookData, setBookData] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,7 +14,7 @@ const RoomDetails = ({ params }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://hotel-relex-server.vercel.app/hotels/${id}`
+          `https://hotel-relex-server.onrender.com/hotels/${id}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -37,17 +38,30 @@ const RoomDetails = ({ params }) => {
     e.preventDefault();
     const form = event.target;
     // const name = form.name.value;
-    const checkIn = form.checkIn.value;
-    const checkOut = form.checkOut.value;
+    const checkIn = new Date(form.checkIn.value);
+    const checkOut = new Date(form.checkOut.value);
+
+    // Calculate the number of days
+    const timeDiff = checkOut - checkIn;
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    // Assuming a fixed price per day (e.g., $100 per day)
+    const pricePerDay = data.price;
+    const totalPrice = daysDiff * pricePerDay;
+
     const bookingData = {
       hotel: data,
-      checkIn,
-      checkOut,
+      checkIn: form.checkIn.value,
+      checkOut: form.checkOut.value,
+      totalPrice,
     };
+    setBookData(bookingData);
     console.log(bookingData);
+    console.log("ho", bookData);
+    // console.log("set", bookData);
 
     // data post
-    fetch("https://hotel-relex-server.vercel.app/hotels/", {
+    fetch("https://hotel-relex-server.onrender.com/booking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -69,10 +83,26 @@ const RoomDetails = ({ params }) => {
         console.error("Error adding product:", error);
       });
   };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    doc.text(`Hotel: ${bookData.hotel.name}`, 10, 10);
+    doc.text(`Check In Date: ${bookData.checkIn}`, 10, 20);
+    doc.text(`Check Out Date: ${bookData.checkOut}`, 10, 30);
+    doc.text(`Total Price: $${bookData.totalPrice}`, 10, 40);
+
+    doc.save("booking-details.pdf");
+  };
   return (
     <div className="px-4 lg:px-24 py-16 space-y-6 ">
       {/* breadcrumb */}
-
+      <button
+        onClick={generatePDF}
+        className="w-1/3 mt-8 px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-violet-600 focus:ring-violet-600 hover:ring-violet-600 text-gray-50"
+      >
+        Generate PDF
+      </button>
       <nav
         aria-label="breadcrumb"
         className="w-full p-4 bg-white text-gray-800"
@@ -204,6 +234,7 @@ const RoomDetails = ({ params }) => {
                         <polygon points="221.27 305.808 147.857 232.396 125.23 255.023 221.27 351.063 388.77 183.564 366.142 160.937 221.27 305.808"></polygon>
                       </svg>
                       <span>{list}</span>
+                      <h3>price:</h3>
                     </li>
                   ))}
                 </ul>

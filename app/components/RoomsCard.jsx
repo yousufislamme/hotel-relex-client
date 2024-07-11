@@ -6,7 +6,7 @@ const RoomsCard = ({ item }) => {
 
   return (
     <div>
-      <article className="flex flex-col dark:bg-gray-50 shadow-lg">
+      <article className="flex flex-col bg-gray-50 shadow-lg">
         <Link
           rel="noopener noreferrer"
           href={`/rooms/${_id}`}
@@ -14,7 +14,7 @@ const RoomsCard = ({ item }) => {
         >
           <img
             alt=""
-            className="object-cover w-full h-52 dark:bg-gray-500"
+            className="object-cover w-full h-52 bg-gray-500"
             src={image}
           />
         </Link>
@@ -27,16 +27,22 @@ const RoomsCard = ({ item }) => {
           <a
             rel="noopener noreferrer"
             href="#"
-            className="text-xs tracking-wider uppercase hover:underline dark:text-violet-600"
+            className="text-xs tracking-wider uppercase hover:underline text-violet-600"
           >
             {location.city}
           </a>
           <h3 className="flex-1 py-2 text-lg font-semibold leading-snug">
             {name}
           </h3>
-          <div className="flex flex-wrap justify-between pt-3 space-x-2 text-xs dark:text-gray-600">
+          <div className="flex flex-wrap justify-between pt-3 space-x-2 text-xs text-gray-600">
             <span>June 1, 2020</span>
-            <span>${price}</span>
+            <div>
+              <h3 className="text-xl text-slate-800 font-semibold">
+                {" "}
+                ${price}
+              </h3>
+              <span>a night</span>
+            </div>
           </div>
         </div>
       </article>

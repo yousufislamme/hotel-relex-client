@@ -1,13 +1,13 @@
 import React from "react";
 
-const BookingList = ({ booking }) => {
+const BookingList = ({ booking ,index}) => {
   const hotels = booking?.hotel;
   console.log(hotels?.name);
   return (
     <tbody>
       <tr className="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50">
         <td className="p-3">
-          <p>97412378923</p>
+          <p>{index + 1}</p>
         </td>
         <td className="p-3">
           <p>{hotels?.name}</p>

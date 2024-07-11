@@ -34,8 +34,8 @@ const Booking = async () => {
               </tr>
             </thead>
 
-            {bookings.map((booking) => (
-              <BookingList booking={booking} key={booking._id} />
+            {bookings.map((booking, index) => (
+              <BookingList booking={booking} key={booking._id} index={index} />
             ))}
           </table>
         </div>
