@@ -2,6 +2,7 @@
 import { hotelApiUrl } from "@/app/api/api";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const ManageHotel = () => {
   const [hotels, sethotels] = useState([]);
@@ -23,7 +24,13 @@ const ManageHotel = () => {
       .then((data) => {
         if (data.deletedCount > 0) {
           sethotels(hotels.filter((hotel) => hotel._id !== _id));
-          alert("deleted");
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Your Room is Deleted",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       });
   };
@@ -53,7 +60,13 @@ const ManageHotel = () => {
             )
           );
           setIsModalOpen(false);
-          alert("updated");
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Updated",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       });
   };

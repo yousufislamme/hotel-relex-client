@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { jsPDF } from "jspdf";
+import Swal from "sweetalert2";
 const RoomDetails = ({ params }) => {
   const id = params.id;
   const [data, setData] = useState(null);
@@ -105,7 +106,13 @@ const RoomDetails = ({ params }) => {
       })
       .then((data) => {
         console.log("booking", data);
-        alert("booking The hotel");
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Room the Booking!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         form.reset(); // Reset the form
       })
       .catch((error) => {

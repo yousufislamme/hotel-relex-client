@@ -1,6 +1,7 @@
 "use client";
 import { hotelsData } from "@/app/api/api";
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 
 const AddRoom = () => {
   const [amenities, setAmenities] = useState({
@@ -57,8 +58,14 @@ const AddRoom = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("send", data);
-        alert("Added The hotel");
+        // console.log("send", data);
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Your Room has been Added",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         form.reset(); // Reset the form
       })
       .catch((error) => {
