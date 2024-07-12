@@ -234,7 +234,6 @@ const RoomDetails = ({ params }) => {
                         <polygon points="221.27 305.808 147.857 232.396 125.23 255.023 221.27 351.063 388.77 183.564 366.142 160.937 221.27 305.808"></polygon>
                       </svg>
                       <span>{list}</span>
-                      <h3>price:</h3>
                     </li>
                   ))}
                 </ul>

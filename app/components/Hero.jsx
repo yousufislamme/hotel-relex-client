@@ -1,4 +1,3 @@
-
 const Hero = () => {
   return (
     <section className="bg-gray-100 text-gray-800 px-1 lg:px-16">

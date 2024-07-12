@@ -20,10 +20,7 @@ const AddRoom = () => {
     const name = form.name.value;
     const description = form.description.value;
     const image = form.image.value;
-    const address = form.address.value;
-    const city = form.city.value;
-    const country = form.country.value;
-    const zip_postal = form.zip_postal.value;
+
     const price = form.price.value;
     const intPrice = parseInt(price);
 
@@ -38,12 +35,7 @@ const AddRoom = () => {
       name,
       description,
       image,
-      location: {
-        address,
-        city,
-        country,
-        zip_postal,
-      },
+
       price: intPrice,
       amenities: selectedAmenities,
     };
@@ -91,7 +83,7 @@ const AddRoom = () => {
           {/* Name */}
           <div>
             <label htmlFor="name" className="block mb-1 ml-1">
-              Hotel Name
+              Room Name
             </label>
             <input
               type="text"
@@ -100,58 +92,11 @@ const AddRoom = () => {
               className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
             />
           </div>
-          {/* Location */}
-          <div>
-            <label htmlFor="address" className="block mb-1 ml-1">
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              placeholder="hotel address"
-              className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
-            />
-          </div>
-          {/* City */}
-          <div>
-            <label htmlFor="city" className="block mb-1 ml-1">
-              City
-            </label>
-            <input
-              type="text"
-              name="city"
-              placeholder="city"
-              className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
-            />
-          </div>
-          {/* Country */}
-          <div>
-            <label htmlFor="country" className="block mb-1 ml-1">
-              Country
-            </label>
-            <input
-              type="text"
-              name="country"
-              placeholder="country"
-              className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
-            />
-          </div>
-          {/* ZIP / Postal */}
-          <div>
-            <label htmlFor="zip_postal" className="block mb-1 ml-1">
-              ZIP / Postal
-            </label>
-            <input
-              type="text"
-              name="zip_postal"
-              placeholder="ZIP / Postal"
-              className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
-            />
-          </div>
+
           {/* Image */}
           <div>
             <label htmlFor="image" className="block mb-1 ml-1">
-              Image Link
+              Room Image Link
             </label>
             <input
               type="text"
@@ -182,12 +127,12 @@ const AddRoom = () => {
               name="description"
               type="text"
               placeholder="description..."
-              className="block w-full p-2 rounded autoexpand focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+              className="block w-full p-2 h-36 rounded autoexpand focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
             ></textarea>
           </div>
           {/* Amenities */}
-          <div>
-            <h3 className="block mb-1 ml-1">Amenities</h3>
+          <div className="space-x-2 space-y-2 ">
+            <h3 className="block mb-1 ml-1">ROOM FACILITIES</h3>
             <label className="inline-flex items-center">
               <input
                 type="checkbox"
@@ -223,7 +168,7 @@ const AddRoom = () => {
                 className="form-checkbox"
                 onChange={handleCheckboxChange}
               />
-              <span className="ml-2">Gym</span>
+              <span className="ml-2">Free Gym</span>
             </label>
             <label className="inline-flex items-center">
               <input
@@ -249,7 +194,7 @@ const AddRoom = () => {
               type="submit"
               className="w-full px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-violet-600 focus:ring-violet-600 hover:ring-violet-600 text-gray-50"
             >
-              Send
+              Book
             </button>
           </div>
         </form>

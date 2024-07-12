@@ -72,13 +72,12 @@ const ManageHotel = () => {
                 <tr>
                   <th className="px-4 py-2">Item</th>
                   <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Location</th>
                   <th className="px-4 py-2">Price</th>
                   <th className="px-4 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {hotels.map(({ _id, name, image, price, location }, index) => (
+                {hotels.map(({ _id, name, image, price }, index) => (
                   <tr key={_id} className="border-b">
                     <th className="px-4 py-2">{index + 1}</th>
                     <td className="px-4 py-2">
@@ -94,12 +93,7 @@ const ManageHotel = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-2">
-                      <span className="badge badge-ghost badge-sm">
-                        {location?.address}
-                        {/* others */}
-                      </span>
-                    </td>
+
                     <td className="px-4 py-2">${price}</td>
                     <td className="px-4 py-2 flex space-x-2">
                       <button
