@@ -5,10 +5,17 @@ import Swal from "sweetalert2";
 
 const BookingList = ({ booking, index }) => {
   const { firstname, lastname, email, phoneNumber } = booking?.customersDetails;
-  const { checkIn, checkOut, roomsQuantity, adult, childen, totalPrice } =
-    booking?.customersDetails.bookingDetails;
+  const {
+    checkIn,
+    checkOut,
+    roomsQuantity,
+    adult,
+    childen,
+    totalPrice,
+    hotel,
+  } = booking?.customersDetails.bookingDetails;
 
-  // console.log(checkIn);
+  console.log(hotel.name);
 
   // delete
 
@@ -35,11 +42,14 @@ const BookingList = ({ booking, index }) => {
         <td className="p-3">
           <p>{index + 1}</p>
         </td>
+        <td className="p-3 text-green-900">
+          <p>{hotel.name}</p>
+        </td>
         <td className="p-3">
           <p>{firstname}</p>
           <p>{lastname}</p>
         </td>
-        <td className="p-3">
+        <td className="p-3 text-blue-800">
           <p>{email}</p>
         </td>
         <td className="p-3">

@@ -26,6 +26,7 @@ const Booking = async () => {
             <thead className="dark:bg-gray-300">
               <tr className="text-left">
                 <th className="p-3">Invoice #</th>
+                <th className="p-3">Room Name</th>
                 <th className="p-3">Client</th>
                 <th className="p-3">email</th>
                 <th className="p-3">Number</th>
