@@ -2,10 +2,10 @@ import Link from "next/link";
 import React from "react";
 
 const RoomsCard = ({ item }) => {
-  const { _id, name, image, location, price } = item;
+  const { _id, name, image, price, description } = item;
 
   return (
-    <div>
+    <>
       <article className="flex flex-col bg-gray-50 shadow-lg">
         <Link
           rel="noopener noreferrer"
@@ -18,43 +18,34 @@ const RoomsCard = ({ item }) => {
             src={image}
           />
         </Link>
-        <div className="flex flex-col flex-1 p-6">
-          <a
-            rel="noopener noreferrer"
-            href="#"
-            aria-label="Te nulla oportere reprimique his dolorum"
-          ></a>
-          <a
-            rel="noopener noreferrer"
-            href="#"
-            className="text-xs tracking-wider uppercase hover:underline text-violet-600"
-          >
-            {/* {location.city} */}
-            {/* Torento */}
-          </a>
-          <h3 className="flex-1 py-2 text-lg font-semibold leading-snug">
+        <div className="flex flex-col flex-1 p-6 space-y-3">
+          <h3 className="flex-1 py-2 text-2xl font-semibold leading-snug">
             {name}
           </h3>
-          <div className="flex justify-between pt-3    ">
+          <p>
+            {" "}
+            {description.slice(0, 105)}....{" "}
+            <Link className="text-blue-600 text-sm" href={`/rooms/${_id}`}>
+              See full
+            </Link>{" "}
+          </p>
+          <div className="flex justify-start gap-8 items-center">
             <div>
               <Link
-                className="bg-violet-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-violet-600 hover:bg-slate-800 text-white text-lg py-3 px-5 "
                 href={`/rooms/${_id}`}
               >
                 Book
               </Link>
             </div>
             <div>
-              <h3 className="text-xl text-slate-800 font-semibold">
-                {" "}
-                ${price}
-              </h3>
-              <span>a night</span>
+              <h3 className="text-[22px] text-slate-800"> ${price}</h3>
+              <span className="text-[12px]">per night</span>
             </div>
           </div>
         </div>
       </article>
-    </div>
+    </>
   );
 };
 

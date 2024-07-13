@@ -27,10 +27,13 @@ const Booking = async () => {
               <tr className="text-left">
                 <th className="p-3">Invoice #</th>
                 <th className="p-3">Client</th>
+                <th className="p-3">email</th>
+                <th className="p-3">Number</th>
                 <th className="p-3">Check In</th>
                 <th className="p-3">Check Out</th>
-                <th className="p-3 text-right">Amount</th>
+                <th className="p-3 text-right">Total Price</th>
                 <th className="p-3">Status</th>
+                <th className="p-3">Action</th>
               </tr>
             </thead>
 

@@ -2,13 +2,7 @@ export const hotels = [
   {
     hotel_id: 1,
     name: "Grand Plaza Hotel",
-    location: {
-      address: "123 Main St, Cityville",
-      city: "Cityville",
-      state: "State",
-      zip: "12345",
-      country: "Country",
-    },
+
     rating: 4.5,
     rooms_available: 10,
     price_per_night: 150.0,
