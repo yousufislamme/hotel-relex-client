@@ -2,18 +2,31 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-
+import { jsPDF } from "jspdf";
+import Swal from "sweetalert2";
 const RoomDetails = ({ params }) => {
   const id = params.id;
   const [data, setData] = useState(null);
+  const [bookData, setBookData] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // set current date
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const dd = String(today.getDate()).padStart(2, "0");
+    setCurrentDate(`${yyyy}-${mm}-${dd}`);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://hotel-relex-server.vercel.app/hotels/${id}`
+          `https://hotel-relex-server.onrender.com/hotels/${id}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -36,18 +49,49 @@ const RoomDetails = ({ params }) => {
   const handleBooking = (e) => {
     e.preventDefault();
     const form = event.target;
-    // const name = form.name.value;
-    const checkIn = form.checkIn.value;
-    const checkOut = form.checkOut.value;
+    const checkIn = new Date(form.checkIn.value);
+    const checkOut = new Date(form.checkOut.value);
+    const firstname = form.firstname.value;
+    const lastname = form.lastname.value;
+    const email = form.email.value;
+    const phoneNumber = form.phoneNumber.value;
+    const roomsQuantity = form.roomsQuantity.value;
+    const adult = form.adult.value;
+    const childen = form.childen.value;
+
+    // Calculate the number of days
+    const timeDiff = checkOut - checkIn;
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    // Assuming a fixed price per day (e.g., $100 per day)
+    const pricePerDay = data.price;
+    const totalPrice = daysDiff * pricePerDay;
+
     const bookingData = {
-      hotel: data,
-      checkIn,
-      checkOut,
+      // checkOut: form.checkOut.value,
+      customersDetails: {
+        firstname,
+        lastname,
+        email,
+        phoneNumber,
+        bookingDetails: {
+          hotel: data,
+          checkIn: form.checkIn.value,
+          checkOut: form.checkOut.value,
+          roomsQuantity,
+          adult,
+          childen,
+          totalPrice,
+        },
+      },
     };
+    setBookData(bookingData);
     console.log(bookingData);
+    console.log("pdf", bookData);
+    // console.log("set", bookData);
 
     // data post
-    fetch("https://hotel-relex-server.vercel.app/hotels/", {
+    fetch("https://hotel-relex-server.onrender.com/booking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,17 +106,40 @@ const RoomDetails = ({ params }) => {
       })
       .then((data) => {
         console.log("booking", data);
-        alert("booking The hotel");
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Room the Booking!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         form.reset(); // Reset the form
       })
       .catch((error) => {
         console.error("Error adding product:", error);
       });
   };
+
+  // pdf
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    doc.text(`Hotel: ${bookData.hotel.name}`, 10, 10);
+    doc.text(`Check In Date: ${bookData.checkIn}`, 10, 20);
+    doc.text(`Check Out Date: ${bookData.checkOut}`, 10, 30);
+    doc.text(`Total Price: $${bookData.totalPrice}`, 10, 40);
+
+    doc.save("booking-details.pdf");
+  };
   return (
     <div className="px-4 lg:px-24 py-16 space-y-6 ">
       {/* breadcrumb */}
-
+      <button
+        onClick={generatePDF}
+        className="w-1/3 mt-8 px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-violet-600 focus:ring-violet-600 hover:ring-violet-600 text-gray-50"
+      >
+        Generate PDF
+      </button>
       <nav
         aria-label="breadcrumb"
         className="w-full p-4 bg-white text-gray-800"
@@ -137,7 +204,7 @@ const RoomDetails = ({ params }) => {
               viewBox="0 0 32 32"
               aria-hidden="true"
               fill="currentColor"
-              className="w-2 h-2 mt-1 transform rotate-90 fill-current dark:text-gray-400"
+              className="w-2 h-2 mt-1 transform rotate-90 fill-current text-gray-400"
             >
               <path d="M32 30.031h-32l16-28.061z"></path>
             </svg>
@@ -154,7 +221,7 @@ const RoomDetails = ({ params }) => {
           >
             <svg
               aria-hidden="true"
-              class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+              class="w-8 h-8  animate-spin text-gray-600 fill-blue-600"
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -174,20 +241,18 @@ const RoomDetails = ({ params }) => {
           <a
             rel="noopener noreferrer"
             href="#"
-            className="block max-w-sm gap-3 mx-auto sm:max-w-full   lg:grid lg:grid-cols-12 dark:bg-gray-50"
+            className="block max-w-sm gap-3 mx-auto sm:max-w-full   lg:grid lg:grid-cols-12 bg-gray-50"
           >
             <img
               src={data?.image}
               alt=""
-              className="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500"
+              className="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 bg-gray-500"
             />
             <div className="p-6 space-y-2 lg:col-span-5">
               <h3 className="text-2xl font-semibold sm:text-4xl ">
                 {data?.name}
               </h3>
-              <span className="text-xs dark:text-gray-600">
-                February 19, 2021
-              </span>
+              <span className="text-xs text-gray-600">February 19, 2021</span>
               <p>{data?.description}</p>
               {/* list  */}
               <div>
@@ -209,44 +274,156 @@ const RoomDetails = ({ params }) => {
                 </ul>
               </div>
               {/* list  */}
+              <h2 className="text-2xl  pt-4 mt-4">${data.price} per Night</h2>
             </div>
           </a>
         )}
       </div>
 
+      {/* booking  */}
+
       {/* date  */}
-      <form
-        onSubmit={handleBooking}
-        className="flex flex-col justify-around  lg:flex lg:flex-row place-items-center w-full"
-      >
-        <div className="flex justify-between flex-col lg:flex-row  px-2 items-center gap-4 lg:gap-8  ">
-          <div>
-            <h3>Check In Date</h3>
-            <input
-              type="date"
-              name="checkIn"
-              id="checkIn"
-              className="px-2 py-2  shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-orange-100 focus:ring-violet-600 ring-violet-600"
-            />
-          </div>
-          <h2 className="text-lg font-bold "> To</h2>
-          <div>
-            <h3>Check Out Date </h3>
-            <input
-              type="date"
-              name="checkOut"
-              id="checkOut"
-              className="px-2 py-2  shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-orange-100 focus:ring-violet-600 ring-violet-600"
-            />
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-1/3 mt-8 px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-violet-600 focus:ring-violet-600 hover:ring-violet-600 text-gray-50"
+      <div>
+        <form
+          onSubmit={handleBooking}
+          className="flex flex-col justify-around p-8 bg-gray-300  lg:flex lg:flex-col space-y-4 w-full"
         >
-          Book
-        </button>
-      </form>
+          <div className="flex justify-between flex-col lg:flex-row  px-2 items-center gap-4 lg:gap-8  ">
+            <div>
+              <h3>Check In Date</h3>
+              <input
+                type="date"
+                name="checkIn"
+                defaultValue={currentDate}
+                id="checkIn"
+                className="px-2 py-2  shadow rounded focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-gray-100 focus:ring-violet-600 ring-violet-600"
+              />
+            </div>
+            <h2 className="text-lg font-bold "> To</h2>
+            <div>
+              <h3>Check Out Date </h3>
+              <input
+                type="date"
+                name="checkOut"
+                id="checkOut"
+                className="px-2 py-2 rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-gray-100 focus:ring-violet-600 ring-violet-600"
+              />
+            </div>
+          </div>
+          {/* form */}
+          <div>
+            <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+              <div className="col-span-full sm:col-span-3">
+                <label htmlFor="firstname" className="text-sm">
+                  First name
+                </label>
+                <input
+                  id="firstname"
+                  type="text"
+                  placeholder="First name"
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                />
+              </div>
+              <div className="col-span-full sm:col-span-3">
+                <label htmlFor="lastname" className="text-sm">
+                  Last name
+                </label>
+                <input
+                  id="lastname"
+                  type="text"
+                  placeholder="Last name"
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                />
+              </div>
+              <div className="col-span-full sm:col-span-3">
+                <label htmlFor="email" className="text-sm">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                />
+              </div>
+              <div className="col-span-full sm:col-span-3">
+                <label htmlFor="email" className="text-sm">
+                  Phone Number
+                </label>
+                <input
+                  id="number"
+                  type="number"
+                  name="phoneNumber"
+                  placeholder="phone number"
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                />
+              </div>
+              <div className="col-span-full sm:col-span-2">
+                <label htmlFor="city" className="text-sm">
+                  Rooms
+                </label>
+                <select
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                  required
+                  type="text"
+                  name="roomsQuantity"
+                >
+                  <option selected>1 Room </option>
+                  <option>2 Rooms </option>
+                  <option>3 Rooms </option>
+                  <option>4 Rooms </option>
+                </select>
+              </div>
+              <div className="col-span-full sm:col-span-2">
+                <label htmlFor="city" className="text-sm">
+                  Adult
+                </label>
+                <select
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                  required
+                  type="text"
+                  name="adult"
+                >
+                  <option selected>1 Adult </option>
+                  <option>2 Adults </option>
+                  <option>3 Adults </option>
+                  <option>4 Adults </option>
+                </select>
+              </div>
+              <div className="col-span-full sm:col-span-2">
+                <label htmlFor="city" className="text-sm">
+                  Childen
+                </label>
+
+                <select
+                  className="block w-full p-2 rounded focus:outline-none focus:ring focus:ring-opacity-25 focus:ring-violet-600 bg-gray-100"
+                  required
+                  type="text"
+                  name="childen"
+                >
+                  <option selected disabled>
+                    {" "}
+                    Childen{" "}
+                  </option>
+                  <option>1 Child </option>
+                  <option>2 Childen </option>
+                  <option>3 Childen </option>
+                  <option>4 Childen </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex item-center justify-center">
+            <button
+              type="submit"
+              className="w-1/3 mt-8 px-4 py-2 font-bold rounded shadow focus:outline-none focus:ring hover:ring focus:ring-opacity-50 bg-violet-600 focus:ring-violet-600 hover:ring-violet-600 text-gray-50"
+            >
+              Book
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

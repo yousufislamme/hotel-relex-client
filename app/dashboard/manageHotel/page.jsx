@@ -2,6 +2,7 @@
 import { hotelApiUrl } from "@/app/api/api";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const ManageHotel = () => {
   const [hotels, sethotels] = useState([]);
@@ -23,7 +24,13 @@ const ManageHotel = () => {
       .then((data) => {
         if (data.deletedCount > 0) {
           sethotels(hotels.filter((hotel) => hotel._id !== _id));
-          alert("deleted");
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Your Room is Deleted",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       });
   };
@@ -53,7 +60,13 @@ const ManageHotel = () => {
             )
           );
           setIsModalOpen(false);
-          alert("updated");
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Updated",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       });
   };
@@ -72,58 +85,55 @@ const ManageHotel = () => {
                 <tr>
                   <th className="px-4 py-2">Item</th>
                   <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Location</th>
                   <th className="px-4 py-2">Price</th>
                   <th className="px-4 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {hotels.map(({ _id, name, image, price, location }, index) => (
-                  <tr key={_id} className="border-b">
-                    <th className="px-4 py-2">{index + 1}</th>
-                    <td className="px-4 py-2">
-                      <div className="flex items-center gap-3">
-                        <div className="avatar">
-                          <div className="mask mask-squircle w-12 h-12">
-                            <img src={image} alt="hotel Image" />
+                {hotels.map(
+                  ({ _id, name, image, price, description }, index) => (
+                    <tr key={_id} className="border-b">
+                      <th className="px-4 py-2">{index + 1}</th>
+                      <td className="px-4 py-2">
+                        <div className="flex items-center gap-3">
+                          <div className="avatar">
+                            <div className="mask mask-squircle w-12 h-12">
+                              <img src={image} alt="hotel Image" />
+                            </div>
+                          </div>
+                          <div>
+                            <div className="font-bold">{name}</div>
+                            <div className="text-sm opacity-50">${price}</div>
                           </div>
                         </div>
-                        <div>
-                          <div className="font-bold">{name}</div>
-                          <div className="text-sm opacity-50">${price}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-2">
-                      <span className="badge badge-ghost badge-sm">
-                        {location?.address}
-                        {/* others */}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2">${price}</td>
-                    <td className="px-4 py-2 flex space-x-2">
-                      <button
-                        onClick={() =>
-                          handleEdit({
-                            _id,
-                            name,
-                            image,
-                            price,
-                          })
-                        }
-                        className="px-2 py-2 bg-green-600 text-white rounded-md"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="px-2 py-2 bg-red-600 text-white rounded-md"
-                        onClick={() => handleDelete(_id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+
+                      <td className="px-4 py-2">${price}</td>
+                      <td className="px-4 py-2 flex space-x-2">
+                        <button
+                          onClick={() =>
+                            handleEdit({
+                              _id,
+                              name,
+                              image,
+                              price,
+                              description,
+                            })
+                          }
+                          className="px-2 py-2 bg-green-600 text-white rounded-md"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="px-2 py-2 bg-red-600 text-white rounded-md"
+                          onClick={() => handleDelete(_id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
@@ -188,16 +198,16 @@ const EdithotelModal = ({ hotel, onClose, onUpdate }) => {
               className="textarea textarea-bordered w-full"
             ></textarea>
           </div>
-          {/* <div className="mb-4">
-            <label className="block mb-2">address</label>
+          <div className="mb-4">
+            <label className="block mb-2">Image Link</label>
             <input
               type="text"
-              name="address"
-              value={updatedHotel.location}
+              name="image"
+              value={updatedHotel.image}
               onChange={handleChange}
               className="input input-bordered w-full"
             />
-          </div> */}
+          </div>
           <div className="flex justify-end">
             <button
               type="button"

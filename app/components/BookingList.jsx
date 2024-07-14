@@ -1,33 +1,81 @@
-import React from "react";
+"use client";
 
-const BookingList = ({ booking }) => {
-  const hotels = booking?.hotel;
-  console.log(hotels?.name);
+import React from "react";
+import Swal from "sweetalert2";
+
+const BookingList = ({ booking, index }) => {
+  const { firstname, lastname, email, phoneNumber } = booking?.customersDetails;
+  const {
+    checkIn,
+    checkOut,
+    roomsQuantity,
+    adult,
+    childen,
+    totalPrice,
+    hotel,
+  } = booking?.customersDetails.bookingDetails;
+
+  console.log(hotel.name);
+
+  // delete
+
+  const handleDelete = (_id) => {
+    fetch(`https://hotel-relex-server.onrender.com/booking/${booking._id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Your Booking is Deleted",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        location.reload(3);
+      });
+  };
+
   return (
     <tbody>
       <tr className="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50">
         <td className="p-3">
-          <p>97412378923</p>
+          <p>{index + 1}</p>
+        </td>
+        <td className="p-3 text-green-900">
+          <p>{hotel.name}</p>
         </td>
         <td className="p-3">
-          <p>{hotels?.name}</p>
+          <p>{firstname}</p>
+          <p>{lastname}</p>
+        </td>
+        <td className="p-3 text-blue-800">
+          <p>{email}</p>
         </td>
         <td className="p-3">
-          <p>{booking.checkIn}</p>
-          {/* <p className="dark:text-gray-600">Friday</p> */}
+          <p>{phoneNumber}</p>
         </td>
         <td className="p-3">
-          <p>{booking.checkOut}</p>
-
-          {/* <p className="dark:text-gray-600">Tuesday</p> */}
+          <p>{checkIn}</p>
+        </td>
+        <td className="p-3">
+          <p>{checkOut}</p>
         </td>
         <td className="p-3 text-right">
-          <p>${hotels?.price}</p>
+          <p>${totalPrice}</p>
         </td>
         <td className="p-3 text-right">
           <span className="px-3 py-1 font-semibold rounded-md dark:bg-violet-600 dark:text-gray-50">
             <span>Pending</span>
           </span>
+        </td>
+        <td>
+          <button
+            className="px-2 py-2 bg-red-600 text-white rounded-md"
+            onClick={() => handleDelete(booking._id)}
+          >
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>
