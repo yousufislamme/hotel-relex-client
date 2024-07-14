@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 
 const RoomsCard = ({ item }) => {
   const { _id, name, image, location, price } = item;
@@ -29,7 +28,7 @@ const RoomsCard = ({ item }) => {
             href="#"
             className="text-xs tracking-wider uppercase hover:underline dark:text-violet-600"
           >
-            {location.city}
+            {/* {location.city} */}
           </a>
           <h3 className="flex-1 py-2 text-lg font-semibold leading-snug">
             {name}

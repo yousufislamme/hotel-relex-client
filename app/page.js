@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import Bannar from "./components/Bannar";
 import Rooms from "./rooms/page";
 import Testimonial from "./components/Testimonial";
+import HeroSwiperSlider from "./components/HeroSwiperSlider";
 
 export default function Home() {
   return (
